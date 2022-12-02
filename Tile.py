@@ -27,7 +27,7 @@ class Tile:
 
     #Creates a square token and assigns it to the tile
     def createSquareToken(self):
-        self.squaretoken = SquareToken()
+        self.squaretoken = SquareToken(self.tile_id)
         return self.squaretoken
 
     #Set the x coordinate
@@ -48,3 +48,6 @@ class Tile:
 
     def getTileId(self):
         return self.tile_id
+
+    def getSquareToken(self):
+        return self.squaretoken

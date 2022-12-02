@@ -12,14 +12,16 @@ def next_round(board, player):
         answer = int(input("What do you want to do for the next round?\n"
                     "-(1) : Add circle token\n"
                     "-(2) : Move circle token\n"
-                    "-(3) : Move square token\n"))
-        while answer not in {1, 2, 3}:
+                    "-(3) : Move 1 square token\n"
+                    "-(4) : Move 2 square token\n"))
+        while answer not in {1, 2, 3, 4}:
             answer = int(input())
     else :
         answer = int(input("What do you want to do for the next round?\n"
                            "-(2) : Move circle token\n"
-                           "-(3) : Move square token\n"))
-        while answer not in {2, 3}:
+                           "-(3) : Move 1 square token\n"
+                           "-(4) : Move 2 square token\n"))
+        while answer not in {2, 3, 4}:
             answer = int(input())
     if answer == 1:
         check = 0
@@ -56,8 +58,8 @@ def next_round(board, player):
         while circletoken not in {0, 1, 2}:
             circletoken = input()
         board.moveCircleToken(coordinate_x,coordinate_y,player,circletoken)
-    else:
-        print("You are going to move a square token :\n")
+    elif answer == 3:
+        print("You are going to move 1 square token :\n")
         coordinate_x = int(input("Choose the x coordinate of the token to move among (0,1,2) :\n"))
         while coordinate_x not in {0, 1, 2}:
             coordinate_x = int(input())
@@ -65,3 +67,12 @@ def next_round(board, player):
         while coordinate_y not in {0, 1, 2}:
             coordinate_y = int(input())
         board.moveSquareToken(board.gamearea[coordinate_x][coordinate_y])
+    else :
+        print("You are going to move 2 square token :\n")
+        coordinate_x = int(input("Choose the x coordinate of the token to move among (0,1,2) :\n"))
+        while coordinate_x not in {0, 1, 2}:
+            coordinate_x = int(input())
+        coordinate_y = int(input("Choose the y coordinate of the token to move among (0,1,2) :\n"))
+        while coordinate_y not in {0, 1, 2}:
+            coordinate_y = int(input())
+        board.move2SquareToken(board.gamearea[coordinate_x][coordinate_y])
