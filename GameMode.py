@@ -1,3 +1,4 @@
+import CONSTANT
 def start():
     choice = 0
     level_choice = ["1", "2", "3"]
@@ -7,21 +8,27 @@ def start():
         choice = input()
 
 def next_round(board, player):
-
-    if player.circletoken_id <= 2:
+    choice1, choice2, choice3, choice4 = ["-(1) : Add circle token\n", "-(2) : Move circle token\n", "-(3) : Move 1 square token\n", "-(4) : Move 2 square token\n"]
+    if player.circletoken_id <= 2 and board.emptytile.tile_id != 5:
         answer = int(input("What do you want to do for the next round?\n"
-                    "-(1) : Add circle token\n"
-                    "-(2) : Move circle token\n"
-                    "-(3) : Move 1 square token\n"
-                    "-(4) : Move 2 square token\n"))
+                    + choice1 + choice2 + choice3 + choice4))
         while answer not in {1, 2, 3, 4}:
             answer = int(input())
-    else :
+    elif player.circletoken_id == 3 and board.emptytile.tile_id != 5:
         answer = int(input("What do you want to do for the next round?\n"
-                           "-(2) : Move circle token\n"
-                           "-(3) : Move 1 square token\n"
-                           "-(4) : Move 2 square token\n"))
+                           + choice2 + choice3 + choice4))
         while answer not in {2, 3, 4}:
+            answer = int(input())
+    elif player.circletoken_id <= 2 and board.emptytile.tile_id == 5:
+        answer = int(input("What do you want to do for the next round?\n"
+                           + choice1 + choice2 + choice3))
+        while answer not in {1, 2, 3}:
+            answer = int(input())
+    else:
+        answer = int(input("What do you want to do for the next round?\n"
+                           + choice2 + choice3))
+
+        while answer not in {2, 3}:
             answer = int(input())
     if answer == 1:
         check = 0
@@ -76,3 +83,34 @@ def next_round(board, player):
         while coordinate_y not in {0, 1, 2}:
             coordinate_y = int(input())
         board.move2SquareToken(board.gamearea[coordinate_x][coordinate_y])
+    isWinner(board, player)
+
+def isWinner(board, player):
+    combination = []
+    if player.circletoken_id == 3:
+        token_1, token_2, token_3 = player.circletoken
+        id_1 = board.gamearea[token_1.get_X()][token_1.get_Y()].tile_id
+        id_2 = board.gamearea[token_2.get_X()][token_2.get_Y()].tile_id
+        id_3 = board.gamearea[token_3.get_X()][token_3.get_Y()].tile_id
+
+        print(str(id_1) + str(id_2) + str(id_3))
+        if id_1 < id_2:
+            if id_2 < id_3:
+                combination = [id_1, id_2, id_3]
+            else:
+                if id_1 > id_3:
+                    combination = [id_3, id_1, id_2]
+                else:
+                    combination = [id_1, id_3, id_2]
+        else:
+            if id_1 < id_3:
+                combination = [id_2, id_1, id_3]
+            else:
+                if id_3 > id_2:
+                    combination = [id_2, id_3, id_1]
+                else:
+                    combination = [id_3, id_2, id_1]
+
+        if combination in CONSTANT.winning_combination:
+            print("Player " + str(player.player_id) + " YOU WIN")
+            exit()

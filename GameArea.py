@@ -15,6 +15,7 @@ class GameArea:
         self.player_1 = player_1
         self.player_2 = player_2
         self.previous_empty_tile_id = 100
+        self.previous2_empty_tile_id = 100
         # Creating initial game area
         for j in range(3):
             for i in range(3):
@@ -30,15 +31,17 @@ class GameArea:
     def displayGameArea(self):
         board = ""
         for j in range(3):
+            board += str(j) + " "
             for i in range(3):
                 if self.gamearea[i][j].isSquareToken():
                     if self.gamearea[i][j].squaretoken.isCircleToken():
-                        board += self.gamearea[i][j].squaretoken.circletoken.color + " "
+                        board += str(self.gamearea[i][j].squaretoken.circletoken.color) + str(self.gamearea[i][j].squaretoken.circletoken.token_id) + " "
                     else:
-                        board += "■ "
+                        board += "■  "
                 else:
-                    board += "▢ "
-            board += "\n"
+                    board += "▢  "
+            board +="\n"
+        print("  0  1  2")
         print(board)
 
     # Swap the place of a square token with the empty tile
@@ -105,14 +108,16 @@ class GameArea:
 
     # Move two square tokens if possible
     def move2SquareToken(self, squaretoken_1):
-        if self.emptytile.tile_id != 5:
+        if self.previous2_empty_tile_id != squaretoken_1.tile_id:
+            self.previous2_empty_tile_id = self.emptytile.tile_id
             tile_id_squaretoken_2 = self.second_squaretokenid([squaretoken_1.tile_id, self.emptytile.tile_id])
             x,y = CONSTANT.correlation[str(tile_id_squaretoken_2)]
             self.previous_empty_tile_id = 100
             self.moveSquareToken(self.gamearea[x,y])
             self.moveSquareToken(squaretoken_1)
+            self.previous_empty_tile_id = 100
         else:
-            print("You cannot move two square token in this layout\n")
+            print("You cannot return to the position of the round before")
 
     # Returns the id of the tile between the empty tile and the one that will move
     def second_squaretokenid(self, search):
