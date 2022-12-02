@@ -13,6 +13,7 @@ class GameArea:
         self.emptytile = self.gamearea[1][1]
         self.player_1 = player_1
         self.player_2 = player_2
+        self.previous_empty_tile_id = 100
         #Creating initial game area
         for j in range(3):
             for i in range(3):
@@ -41,27 +42,32 @@ class GameArea:
 
     #Swap the place of a square token with the empty tile
     def switchTokenPosition(self, tile_1, tile_2):
-        #If tile_2 is the empty tile
-        if tile_2.squaretoken is None:
-            #If there are circle token on tile_1
-            if tile_1.squaretoken.isCircleToken():
-                x = tile_2.get_X()
-                y = tile_2.get_Y()
-                #Change (x
-                tile_1.squaretoken.circletoken.set_X(x)
-                tile_1.squaretoken.circletoken.set_Y(y)
-                tile_2.setSquareToken(tile_1.squaretoken)
-                tile_1.squaretoken = None
-                self.emptytile = tile_1
+        if tile_1.tile_id != self.previous_empty_tile_id:
+            self.previous_empty_tile_id = tile_2.tile_id
+            #If tile_2 is the empty tile
+            if tile_2.squaretoken is None:
+                #If there are circle token on tile_1
+                if tile_1.squaretoken.isCircleToken():
+                    x = tile_2.get_X()
+                    y = tile_2.get_Y()
+                    #Change (x
+                    tile_1.squaretoken.circletoken.set_X(x)
+                    tile_1.squaretoken.circletoken.set_Y(y)
+                    tile_2.setSquareToken(tile_1.squaretoken)
+                    tile_1.squaretoken = None
+                    self.emptytile = tile_1
+                else:
+                    tile_2.setSquareToken(tile_1.squaretoken)
+                    tile_1.squaretoken = None
+                    self.emptytile = tile_1
+            #If tile_1 is the empty tile
             else:
-                tile_2.setSquareToken(tile_1.squaretoken)
-                tile_1.squaretoken = None
+                tile_1.setSquareToken(tile_2.squaretoken)
+                tile_2.squaretoken = None
                 self.emptytile = tile_1
-        #If tile_1 is the empty tile
         else:
-            tile_1.setSquareToken(tile_2.squaretoken)
-            tile_2.squaretoken = None
-            self.emptytile = tile_1
+            print("You cannot return to the position of the round before")
+
 
     #Checks if the square token can go on the empty tile and places it there if possible
     def moveSquareToken(self, squaretoken):
@@ -94,6 +100,26 @@ class GameArea:
             if squaretoken.tile_id in {6,8}:
                 self.switchTokenPosition(squaretoken, self.emptytile)
 
+    def move2SquareToken(self, squaretoken_1):
+        self.val(squaretoken_1)
+        self.previous_empty_tile_id = 100
+        if self.emptytile.tile_id != 5:
+            self.moveSquareToken(squaretoken_1)
+            self.moveSquareToken(squaretoken_2)
+
+    def val(self, search):
+        liste = [[1, 4, 7], [1, 2, 3], [3, 6, 9], [9, 8, 7], [4, 5, 6], [2, 5, 8]]
+        for i in range(6):
+            if search[0] in liste[i] and search[1] in liste[i]:
+                new_liste = liste[i]
+                x, y, z = new_liste
+                if x not in search:
+                    return x
+                elif y not in search:
+                    return y
+                elif z not in search:
+                    return z
+
     #Add a circle token on a square token if it does not yet have one
     def addCircleToken(self, x, y, player):
         if player.circletoken_id <= 2:
@@ -108,13 +134,13 @@ class GameArea:
                     player.circletoken_id += 1
                     return 1
                 else:
-                    print("There is already a circle token on this square token")
+                    print("There is already a circle token on this square token\n")
                     return 0
             else:
-                print("There is no square token on this tile")
+                print("There is no square token on this tile\n")
                 return 0
         else:
-            print("All of this player's circle token are already on the game area")
+            print("All of this player's circle token are already on the game area\n")
             return 0
 
     #Moves a circle token onto another square token if there is no circle token on it yet

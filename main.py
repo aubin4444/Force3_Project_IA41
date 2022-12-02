@@ -34,10 +34,22 @@ if __name__ == "__main__":
     canva = canva()
     window.mainloop() """
 
+
 player_1 = Player(1, "R")
 player_2 = Player(2, "B")
 board = GameArea(player_1, player_2)
 board.displayGameArea()
+cherche = [2,8]
+print(board.val(cherche))
+
+"""
+board.moveSquareToken(board.gamearea[0][1])
+board.moveSquareToken(board.gamearea[0][2])
+board.displayGameArea()
+board.move2SquareToken(board.gamearea[0][1], board.gamearea[0][0])
+board.displayGameArea()
+"""
+"""
 for i in range(5):
     gm.next_round(board, player_1)
     board.displayGameArea()
@@ -45,6 +57,7 @@ for i in range(5):
     board.displayGameArea()
     """
 
+"""
 
 board.displayGameArea()
 board.addCircleToken(0,1,player_2)

@@ -45,3 +45,6 @@ class Tile:
     # Get the y coordinate
     def get_Y(self):
         return self.pos_Y
+
+    def getTileId(self):
+        return self.tile_id
