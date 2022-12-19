@@ -56,7 +56,7 @@ def make_move(board,litlemove,indexmove,ismax,circle_tokenid):
 
     #the indexmove is to select the type of move(0=place token,1=move token,2=move square 3 move 2square)
     if(indexmove==0):
-        if(ismax):
+        if ismax == 1:
             #litlemove is a list of two dimentions (list of coordinates) for where the token can be moved
             board.addCircleToken(litlemove[0],litlemove[1],board.player_1)
             #board.displayGameArea()
@@ -64,7 +64,7 @@ def make_move(board,litlemove,indexmove,ismax,circle_tokenid):
             board.addCircleToken(litlemove[0],litlemove[1],board.player_2)
             #board.displayGameArea()
     if(indexmove==1):
-        if(ismax):
+        if ismax == 1:
             board.moveCircleToken(litlemove[0],litlemove[1],board.player_1,circle_tokenid)
             #board.displayGameArea()
         else:
@@ -160,11 +160,11 @@ def findBestMove(board, player):
     for move in listofmove:
         # copy du board
 
-        for i in range(board.player_1.getnumberofcircletoken()):
+        for i in range(player.getnumberofcircletoken()):
                 newState = deepcopy(board)
                 # on joue le coup
-                make_move(newState, move, 1, 1,i)
-                moveVal = minmax(newState, 1, False, board)
+                make_move(newState, move, 1, player.player_id,i)
+                moveVal = minmax(newState, player.player_id, False, board)
                 print("moveVal=" + str(moveVal)+"move="+str(move)+"id_token="+str(i))
 
 
@@ -182,8 +182,8 @@ def findBestMove(board, player):
         # copy du board
         newState = deepcopy(board)
         # on joue le coup
-        make_move(newState, move, 0, 1,-1)
-        moveVal = minmax(newState, 1, False, board)
+        make_move(newState, move, 0, player.player_id,-1)
+        moveVal = minmax(newState, player.player_id, False, board)
         print("moveVal=" + str(moveVal) + "move=" + str(move))
         if (moveVal > bestVal):
             bestMove = move
@@ -205,6 +205,7 @@ if __name__ == '__main__':
     board.addCircleToken(2, 2, player_1)
     board.addCircleToken(0, 0, player_2)
     board.addCircleToken(2, 0, player_1)
+    board.addCircleToken(0, 1, player_2)
 
 
 
@@ -215,7 +216,7 @@ if __name__ == '__main__':
     # print("hh"+str(get_possible_moves(board,1).move_tokens))
     # print("hh" + str(get_possible_moves(board, 1).place_token))
 
-    board = findBestMove(board)
+    board = findBestMove(board, player_1)
     board.displayGameArea()
 
 

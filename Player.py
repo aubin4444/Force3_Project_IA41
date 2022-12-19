@@ -17,3 +17,7 @@ class Player:
         for i in range(len(self.circletoken)):
             print(self.circletoken[i].c, self.circletoken[i].get_Y())
 
+    def getplayer(self, id):
+        if id == self.player_id:
+            return self
+
