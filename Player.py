@@ -8,6 +8,12 @@ class Player:
         self.color = color
         self.circletoken = []
         self.circletoken_id = 0
+        self.isia = False
 
     def getnumberofcircletoken(self):
         return len(self.circletoken)
+
+    def showccircletoken(self):
+        for i in range(len(self.circletoken)):
+            print(self.circletoken[i].c, self.circletoken[i].get_Y())
+
