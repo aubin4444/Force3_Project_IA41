@@ -7,6 +7,7 @@ from move import move
 from Tile import Tile
 import CONSTANT
 
+# Fonction qui recoit une liste de coordonnées et qui retourne un poid
 def grades(liste):
     if len(liste) == 0:
         grade = 0
@@ -51,36 +52,6 @@ def evaluate(board,ismax,player_id):
     print("coordonnées des token du player 1 sont : " + str(token_player1) + " et la note est " + str(grades(token_player1)))
     print("coordonnées des token du player 2 sont : " + str(token_player2) + " et la note est " + str(grades(token_player2)))
 
-    """
-    # Si player_1 au moins 1 token sur le board
-    if len(p1_tok) >= 1:
-        x0 = p1_tok[0].get_X()
-        y0 = p1_tok[0].get_Y()
-        # Si player_1 a 1 token sur le board (note = 1)
-        if len(p1_tok) == 1:
-            result = 1
-        # Si player_1 au moins 2 tokens sur le board
-        elif len(p1_tok) >= 2:
-            x1 = p1_tok[1].get_X()
-            y1 = p1_tok[1].get_Y()
-            # Si player_1 a 2 token sur le board
-            if len(p1_tok) == 2:
-                # Si les 2 ne sont pas alignés (note = 2)
-                if x0 != x1 and y0 != y1:
-                    result = 2
-                # Si les 2 sont alignés (note = 3)
-                else :
-                    result = 3
-            # Si player_1 a 3 tokens sur le board
-            elif len(p1_tok) == 3:
-                x2 = p1_tok[2].get_X()
-                y2 = p1_tok[2].get_Y()
-                # Si les 3 tokens sont alignés (note = 10)
-                if (x0 == x1 and x1 == x2) or (y0 == y1 and y1 == y2):
-                    result = 10
-                elif (x0 == x1)
-            """
-
     """# So thegoodplayer is the player who we want to will
     # thebadplayer is the player who we want to lose
     # they depend of the player_id
@@ -99,6 +70,7 @@ def evaluate(board,ismax,player_id):
             return -10
         else:
             return 0"""
+# Fonction qui se charge de récupérer tous les circle token du board et de retourner une liste de leur coordonnées
 def rec_circletoken(board):
     player_1_token = []
     player_2_token = []
@@ -116,6 +88,7 @@ def rec_circletoken(board):
 
     return coo_token_player1, coo_token_player2
 
+# Fonction qui recoit la liste des circle token du board et qui retourn la liste des coordonnées correspondantes
 def rec_circletoken_coordonnées(player_token):
     coordonnées = []
 
@@ -406,10 +379,12 @@ if __name__ == '__main__':
     board.addCircleToken(2, 0, player_1)
     board.addCircleToken(1, 2, player_1)
     board.addCircleToken(0, 2, player_2)
+    board.addCircleToken(2, 2, player_2)
+    board.addCircleToken(2, 1, player_2)
     board.moveSquareToken(board.gamearea[1][2])
     board.displayGameArea()
     evaluate(board, 1, 1)
-    #board = findBestMove(board, board.player_2)
+    #board = findBestMove(board, board.player_1)
     #board.displayGameArea()
     #evaluate(board, 1, 1)
 
