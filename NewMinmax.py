@@ -7,10 +7,36 @@ from move import move
 from Tile import Tile
 import CONSTANT
 
+def grades(liste):
+    if len(liste) == 0:
+        grade = 0
+        return grade
+    elif len(liste) == 1:
+        grade = 1
+        return grade
+    else:
+        head = liste.pop(0)
+        body = deepcopy(liste)
+
+        grade = grades(liste)
+
+        for i in range(len(body)):
+            next = body[i]
+
+            if head[0] == next[0]:
+                grade += 1 + 2*i
+            """if head[0] == next[1]:
+                grade -= 1
+            if head[1] == next[0]:
+                grade -= 1"""
+            if head[1] == next[1]:
+                grade += 1 + 2*i
+        return grade
+
 # Checking if row can be complete by player or opponent
 def evaluate(board,ismax,player_id):
 
-    # The player_id is the id of the player who we want to will
+    """# The player_id is the id of the player who we want to will
     # The ismax is just to know if is the turn of the max or min player
     players = [board.player_1, board.player_2]
     if player_id == 0:
@@ -18,54 +44,43 @@ def evaluate(board,ismax,player_id):
         thebadplayer = players[1]
     elif player_id == 1:
         thegoodplayer = players[1]
-        thebadplayer = players[0]
+        thebadplayer = players[0]"""
 
-    p1_tok, p2_tok = rec_circletoken(board)
+    token_player1, token_player2 = rec_circletoken(board)
 
-    # Si il player_1 n'a pas de token sur le board (note = 0)
-    if len(p1_tok) == 0:
-        return 0
+    print("coordonnées des token du player 1 sont : " + str(token_player1) + " et la note est " + str(grades(token_player1)))
+    print("coordonnées des token du player 2 sont : " + str(token_player2) + " et la note est " + str(grades(token_player2)))
+
+    """
     # Si player_1 au moins 1 token sur le board
-    elif len(p1_tok) >= 1:
+    if len(p1_tok) >= 1:
         x0 = p1_tok[0].get_X()
         y0 = p1_tok[0].get_Y()
         # Si player_1 a 1 token sur le board (note = 1)
         if len(p1_tok) == 1:
-            return 1
+            result = 1
         # Si player_1 au moins 2 tokens sur le board
         elif len(p1_tok) >= 2:
             x1 = p1_tok[1].get_X()
             y1 = p1_tok[1].get_Y()
             # Si player_1 a 2 token sur le board
             if len(p1_tok) == 2:
-                # Si les 2 sont alignés (note = 3)
-                if x0 == x1 or y0 == y1:
-                    return 3
                 # Si les 2 ne sont pas alignés (note = 2)
-                else:
-                    return 2
+                if x0 != x1 and y0 != y1:
+                    result = 2
+                # Si les 2 sont alignés (note = 3)
+                else :
+                    result = 3
             # Si player_1 a 3 tokens sur le board
             elif len(p1_tok) == 3:
                 x2 = p1_tok[2].get_X()
                 y2 = p1_tok[2].get_Y()
                 # Si les 3 tokens sont alignés (note = 10)
                 if (x0 == x1 and x1 == x2) or (y0 == y1 and y1 == y2):
-                    return 10
+                    result = 10
+                elif (x0 == x1)
+            """
 
-
-
-
-
-    """print("Jeton du player_1 :")
-    for x in range(len(player_1_token)):
-        print("Jeton " + str(player_1_token[x].color) + str(player_1_token[x].token_id) +
-              " en position [" + str(player_1_token[x].get_X()) + " ," + str(player_1_token[x].get_Y()) +
-              "] player id = " + str(player_1_token[x].player_id))
-    print("\nJeton du player_2 :")
-    for x in range(len(player_2_token)):
-        print("Jeton " + str(player_2_token[x].color) + str(player_2_token[x].token_id) +
-              " en position [" + str(player_2_token[x].get_X()) + " ," + str(player_2_token[x].get_Y()) +
-              "] player id = " + str(player_2_token[x].player_id))"""
     """# So thegoodplayer is the player who we want to will
     # thebadplayer is the player who we want to lose
     # they depend of the player_id
@@ -96,7 +111,30 @@ def rec_circletoken(board):
                     else:
                         player_2_token.append(board.gamearea[i][j].getSquareToken().getCircleToken())
 
-    return player_1_token, player_2_token
+    coo_token_player1 = rec_circletoken_coordonnées(player_1_token)
+    coo_token_player2 = rec_circletoken_coordonnées(player_2_token)
+
+    return coo_token_player1, coo_token_player2
+
+def rec_circletoken_coordonnées(player_token):
+    coordonnées = []
+
+    # Si le player au moins 1 token sur le board
+    if len(player_token) >= 1:
+        x0 = player_token[0].get_X()
+        y0 = player_token[0].get_Y()
+        coordonnées.append([x0, y0])
+    # Si le player au moins 2 tokens sur le board
+    if len(player_token) >= 2:
+        x1 = player_token[1].get_X()
+        y1 = player_token[1].get_Y()
+        coordonnées.append([x1, y1])
+    # Si le player a 3 tokens sur le board
+    if len(player_token) == 3:
+        x2 = player_token[2].get_X()
+        y2 = player_token[2].get_Y()
+        coordonnées.append([x2, y2])
+    return coordonnées
 
 # Define a list of two dimentions (list of coordinates) for where the token can be moved
 def allmovecirculartokens(board):
@@ -176,9 +214,9 @@ def minmax(state, depth, ismax, player_id):
 
     # evaluate the board
     score = evaluate(state, ismax,player_id)
-    if score == 10:
+    if score == 6:
         return score
-    if score == -10:
+    if score == -6:
         return score
     # Si la profondeur maximale est atteinte
     if depth == 0:
@@ -253,11 +291,10 @@ def minmax(state, depth, ismax, player_id):
             # Création d'une copie du board
             newState = deepcopy(state)
             # Éxecution du coup
-            make_move(newState, move, 0, False,player_id, -1)
-            value = minmax(newState, depth - 1, True,player_id)
+            make_move(newState, move, 0, False, player_id, -1)
+            value = minmax(newState, depth - 1, True, player_id)
             # Test de la valeure obtenue
             bestValue = min(bestValue, value)
-
 
         return bestValue
 
@@ -364,18 +401,18 @@ if __name__ == '__main__':
     player_1 = Player(0, "R")
     player_2 = Player(1, "B")
     board = GameArea(player_1, player_2)
-    board.addCircleToken(2, 1, player_1)
-    board.addCircleToken(0, 0, player_1)
-    board.moveSquareToken(board.gamearea[2][1])
 
-    board.addCircleToken(2, 2, player_2)
-    board.addCircleToken(0, 1, player_1)
-
+    board.addCircleToken(1, 0, player_1)
+    board.addCircleToken(2, 0, player_1)
+    board.addCircleToken(1, 2, player_1)
+    board.addCircleToken(0, 2, player_2)
+    board.moveSquareToken(board.gamearea[1][2])
     board.displayGameArea()
-
+    evaluate(board, 1, 1)
     #board = findBestMove(board, board.player_2)
     #board.displayGameArea()
-    evaluate(board, 1, 1)
+    #evaluate(board, 1, 1)
+
 
 
 
