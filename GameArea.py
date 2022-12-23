@@ -1,14 +1,19 @@
 from Tile import Tile
 import numpy as np
 import CONSTANT
+import pygame
 
 
-class GameArea:
+class GameArea(pygame.sprite.Sprite):
     """This class instantiate a game area with the following parameters:
     - player_1: the first player
     -player_2: the second player"""
     def __init__(self, player_1, player_2):
         k = 1
+        super().__init__()
+        self.image = pygame.image.load('assets/Grid.png')
+        self.image = pygame.transform.scale(self.image, (1200, 700))
+        self.rect = self.image.get_rect()
         # Creating an empty game area
         self.gamearea = np.empty([3, 3], dtype=Tile)
         self.emptytile = self.gamearea[1][1]
@@ -21,6 +26,7 @@ class GameArea:
             for i in range(3):
                 if i == 1 and j == 1:
                     self.gamearea[i][j] = Tile(i, j, k)
+
                     self.emptytile = self.gamearea[i][j]
                     k += 1
                 else:
@@ -138,9 +144,9 @@ class GameArea:
                 return 0
 
     # Move two square tokens if possible
-    def move2SquareToken(self, squaretoken_1):
+    def move2SquareToken(self, squaretoken_1, isia = False):
         # Check if we do not make the opposite movement of the previous round
-        if self.previous2_empty_tile_id != squaretoken_1.tile_id:
+        if self.previous2_empty_tile_id != squaretoken_1.tile_id or isia == True:
             self.previous2_empty_tile_id = self.emptytile.tile_id
             # Get the square token id between the designated square token and the empty tile
             tile_id_squaretoken_2 = self.second_squaretokenid([squaretoken_1.tile_id, self.emptytile.tile_id])
@@ -148,13 +154,12 @@ class GameArea:
             if tile_id_squaretoken_2 is not None:
                 # Get the coordinates of this square token
                 x,y = CONSTANT.correlation[str(tile_id_squaretoken_2)]
-                print("x = " + str(x) + " y = " + str(y))
                 # Change the previous empty square id so as not to prevent the movement of two square tokens
                 self.previous_empty_tile_id = 100
                 # Use this coordinates to move the first square token on the game area
-                self.moveSquareToken(self.gamearea[x,y])
+                self.moveSquareToken(self.gamearea[x,y], isia)
                 # Move the second square token on the game area
-                self.moveSquareToken(squaretoken_1)
+                self.moveSquareToken(squaretoken_1, isia)
                 # Change the id of the previous move square token so as not to prevent the next  1 move of a square token
                 self.previous_empty_tile_id = 10
                 return  1
