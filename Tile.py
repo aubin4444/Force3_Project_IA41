@@ -1,13 +1,10 @@
-import pygame
+
 from SquareToken import SquareToken
-class Tile(pygame.sprite.Sprite):
+class Tile:
     """This class instanciates a tile of the game area which can carry a square token or not with the following parameters:
      -  pos_X and pos_Y : row and column position of the tile
      -  tile_id : identifier of the tile"""
     def __init__(self, pos_X, pos_Y, tile_id):
-        self.image = pygame.image.load('assets/Tile.png')
-        self.image = pygame.transform.scale(self.image, (230, 230))
-        self.rect = self.image.get_rect()
         self.pos_X = pos_X
         self.pos_Y = pos_Y
         self.tile_id = tile_id

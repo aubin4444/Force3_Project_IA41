@@ -1,19 +1,14 @@
 from Tile import Tile
 import numpy as np
 import CONSTANT
-import pygame
 
 
-class GameArea(pygame.sprite.Sprite):
+class GameArea:
     """This class instantiate a game area with the following parameters:
     - player_1: the first player
     -player_2: the second player"""
     def __init__(self, player_1, player_2):
         k = 1
-        super().__init__()
-        self.image = pygame.image.load('assets/Grid.png')
-        self.image = pygame.transform.scale(self.image, (1200, 700))
-        self.rect = self.image.get_rect()
         # Creating an empty game area
         self.gamearea = np.empty([3, 3], dtype=Tile)
         self.emptytile = self.gamearea[1][1]
@@ -26,7 +21,6 @@ class GameArea(pygame.sprite.Sprite):
             for i in range(3):
                 if i == 1 and j == 1:
                     self.gamearea[i][j] = Tile(i, j, k)
-
                     self.emptytile = self.gamearea[i][j]
                     k += 1
                 else:

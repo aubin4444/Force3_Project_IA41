@@ -1,12 +1,8 @@
 from CircleToken import CircleToken
-import pygame
 
-class SquareToken(pygame.sprite.Sprite):
+class SquareToken():
     """This class instanciate a square token which can carry a circle token or not"""
     def __init__(self, tile_id):
-        self.image = pygame.image.load('assets/Square_token.png')
-        self.image = pygame.transform.scale(self.image, (180, 180))
-        self.rect = self.image.get_rect()
         self.circletoken = None
         self.tile_id = tile_id
 
