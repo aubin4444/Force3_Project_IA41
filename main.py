@@ -1,6 +1,5 @@
 from GameArea import GameArea
 from Player import Player
-from CircleToken import CircleToken
 import GameMode as gm
 import NewMinmax as ai
 from tkinter import *
@@ -23,17 +22,7 @@ player = [player_1, player_2]
 #Creation of the game board
 board = GameArea(player_1, player_2)
 board.displayGameArea()
-"""
-board.addCircleToken(2,0,player_1)
 
-board.displayGameArea()
-board.moveCircleToken(2,1,player_1,0)
-
-board.displayGameArea()
-
-board.moveCircleToken(2,2,player_1,0)
-board.displayGameArea()
-"""
 round = 0
 check = "0"
 
